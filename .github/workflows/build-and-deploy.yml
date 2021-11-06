@@ -6,7 +6,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    name: A job to deploy blog.
     steps:
       - name: Checkout
         uses: actions/checkout@v1
@@ -22,9 +21,10 @@ jobs:
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-node-
+
       - name: Install Dependencies
         if: steps.cache.outputs.cache-hit != 'true'
-        run: npm ci
+        run: yarn install --frozen-lockfile
 
       # Deploy hexo blog website.
       - name: Deploy
@@ -32,6 +32,7 @@ jobs:
         uses: sma11black/hexo-action@v1.0.3
         with:
           deploy_key: ${{ secrets.DEPLOY_KEY }}
+
       # Use the output from the `deploy` step(use for test action)
       - name: Get the output
         run: |
