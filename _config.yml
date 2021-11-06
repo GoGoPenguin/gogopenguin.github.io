@@ -4,9 +4,9 @@
 
 # Site
 title: GoGoPenguin
-subtitle: ""
+subtitle: "要改的 code 太多了，那就改天吧"
 description: ""
-keywords:
+keywords: backend, docker, golang, python, php
 author: GoGoPenguin
 language: zh-TW
 timezone: "asia/taipei"
@@ -105,3 +105,12 @@ deploy:
   type: git
   repo: git@github.com:GoGoPenguin/gogopenguin.github.io.git
   branch: gh-pages
+
+sitemap:
+  path: sitemap.xml
+
+search:
+  path: search.xml
+  field: post
+  content: true
+  format: html
