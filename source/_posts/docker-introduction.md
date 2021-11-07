@@ -13,6 +13,8 @@ category: docker
 
 它基於 Google 公司推出的 [Go](https://golang.org/) 語言實作。（ Dotcloud 公司後來改名為 Docker ）
 
+<!-- more -->
+
 ## Docker 是什麼？
 
 Docker 是一種[容器](https://containerd.io/)，而容器是打包代碼及其所有依賴項的標準軟件單元，因此應用程式可以從一個計算環境快速可靠地運行到另一個計算環境。
