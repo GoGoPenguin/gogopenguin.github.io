@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"gogopenguin.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="Learn about the six benefits of cloud, common cloud adoption strategies, and cloud compute. We’ll explore compute services by digging into Amazon Elastic Compute Cloud (Amazon EC2) with a focus on he">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AWS Power Hour: Cloud Practitioner | Intro to AWS Cloud">
+<meta property="og:url" content="https://gogopenguin.github.io/2021/11/08/aws-power-hour-cloud-practitioner-intro-to-aws-cloud/index.html">
+<meta property="og:site_name" content="GoGoPenguin">
+<meta property="og:description" content="Learn about the six benefits of cloud, common cloud adoption strategies, and cloud compute. We’ll explore compute services by digging into Amazon Elastic Compute Cloud (Amazon EC2) with a focus on he">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://miro.medium.com/max/1400/1*4fl-1Eh_yI1cVPYaROn_3w.png">
+<meta property="og:image" content="https://gogopenguin.github.io/2021/11/08/aws-power-hour-cloud-practitioner-intro-to-aws-cloud/deployment-models.png">
+<meta property="og:image" content="https://d1.awsstatic.com/AWS-Management-Console/Polaris%20Console%20Home.6f773790a19ed7c9a37fcfeddb09076cc52a44e8.png">
+<meta property="og:image" content="https://gogopenguin.github.io/2021/11/08/aws-power-hour-cloud-practitioner-intro-to-aws-cloud/instance-type.png">
+<meta property="article:published_time" content="2021-11-08T01:04:11.000Z">
+<meta property="article:modified_time" content="2021-11-09T14:23:49.317Z">
+<meta property="article:author" content="GoGoPenguin">
+<meta property="article:tag" content="aws">
+<meta property="article:tag" content="cloud practitioner">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://miro.medium.com/max/1400/1*4fl-1Eh_yI1cVPYaROn_3w.png">
+
+<link rel="canonical" href="https://gogopenguin.github.io/2021/11/08/aws-power-hour-cloud-practitioner-intro-to-aws-cloud/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-TW'
+  };
+</script>
+
+  <title>AWS Power Hour: Cloud Practitioner | Intro to AWS Cloud | GoGoPenguin</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">GoGoPenguin</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">要改的 code 太多了，那就改天吧</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>歸檔</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>關於</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分類</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜尋
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜尋..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://gogopenguin.github.io/2021/11/08/aws-power-hour-cloud-practitioner-intro-to-aws-cloud/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="GoGoPenguin">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="GoGoPenguin">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          AWS Power Hour: Cloud Practitioner | Intro to AWS Cloud
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">發表於</span>
+
+              <time title="創建時間：2021-11-08 09:04:11" itemprop="dateCreated datePublished" datetime="2021-11-08T09:04:11+08:00">2021-11-08</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新於</span>
+                <time title="修改時間：2021-11-09 22:23:49" itemprop="dateModified" datetime="2021-11-09T22:23:49+08:00">2021-11-09</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <blockquote>
+<p>Learn about the six benefits of cloud, common cloud adoption strategies, and cloud compute. We’ll explore compute services by digging into Amazon Elastic Compute Cloud (Amazon EC2) with a focus on helping you understand the important aspects of creating an EC2 instance.</p>
+</blockquote>
+<span id="more"></span>
+
+<h1 id="AWS-證照"><a href="#AWS-證照" class="headerlink" title="AWS 證照 "></a>AWS 證照 <!-- markdownlint-disable MD025 --></h1><p>下圖為 AWS 可用的證照：</p>
+<p>左邊灰底為「角色型認證」的證照，依照工作職稱或是需求的不同，可以選擇相關的證照。</p>
+<p>右邊則是指定專業領域的「專家級」證照。</p>
+<p><img data-src="https://miro.medium.com/max/1400/1*4fl-1Eh_yI1cVPYaROn_3w.png" alt="Available AWS Certifications"></p>
+<p>相關網址：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://www.google.com/aclk?sa=L&ai=DChcSEwim_MzJ_4n0AhULupYKHS3yCLIYABAAGgJ0bA&ae=2&sig=AOD64_3qeem0qBNX0ACU1IaetgUfWbonzQ&q&adurl&ved=2ahUKEwjsqcbJ_4n0AhWbdd4KHWZsCDoQ0Qx6BAgDEAE">AWS 證照</a></li>
+<li><a target="_blank" rel="noopener" href="https://aws.amazon.com/training/learn-about/">按角色或解決方案進行學習</a></li>
+</ul>
+<h1 id="關於考試"><a href="#關於考試" class="headerlink" title="關於考試"></a>關於考試</h1><ul>
+<li>Q: 題數<ul>
+<li>A: 65</li>
+</ul>
+</li>
+<li>Q: 種類<ul>
+<li>A: 多選題、複選題</li>
+</ul>
+</li>
+<li>Q: 時間<ul>
+<li>90 分鐘</li>
+</ul>
+</li>
+<li>Q: 費用<ul>
+<li>A: 100 美金</li>
+</ul>
+</li>
+<li>Q: 總分<ul>
+<li>A: 最低 100 分，滿分 1000 分，700 分及格</li>
+</ul>
+</li>
+<li>Q: 考場<ul>
+<li>A: 集中考場或線上考試，但需要有 Webcam</li>
+</ul>
+</li>
+<li>Q: 如何安排考試<ul>
+<li>A: 到<a target="_blank" rel="noopener" href="https://www.aws.training/certification">這裡</a>報名</li>
+</ul>
+</li>
+</ul>
+<h1 id="什麼是雲？"><a href="#什麼是雲？" class="headerlink" title="什麼是雲？"></a>什麼是雲？</h1><p>「雲」是一種透過網路按需求的 IT 資源，採用多少算多少的付費模式。</p>
+<blockquote>
+<p>Cloud computing is the on-demand delivery of IT resources via the internet with a pay-as-you-go pricing model</p>
+</blockquote>
+<p>那「IT 資源」又是什麼？它包含：</p>
+<ul>
+<li>計算資源（Compute）</li>
+<li>資料庫（Database）</li>
+<li>儲存空間（Storage）</li>
+</ul>
+<p>雲的好處是你可以隨時透過網路去租借資源，且隨時都能夠終止。</p>
+<h1 id="部署方式"><a href="#部署方式" class="headerlink" title="部署方式"></a>部署方式</h1><img data-src="/2021/11/08/aws-power-hour-cloud-practitioner-intro-to-aws-cloud/deployment-models.png" class="" title="Deployment Models">
+
+<ul>
+<li>私有雲（on-premises）</li>
+<li>公有雲 (cloud deployment)</li>
+<li>混合雲（hybrid deployment）</li>
+</ul>
+<h1 id="使用雲端的好處"><a href="#使用雲端的好處" class="headerlink" title="使用雲端的好處"></a>使用雲端的好處</h1><ul>
+<li><p>節省費用支出</p>
+<p>使用雲端服務可以減少前期開發時的硬體成本，因為雲服務可以依據使用量來計價，不必一次購入昂貴的機器。</p>
+</li>
+<li><p>不用自己維護機器</p>
+<p>將維護的工作交給雲端公司，讓開發人員能夠更專注於開發應用程式上面。</p>
+</li>
+<li><p>不用猜測要多大機器規格</p>
+<p>雲端主機能依據使用量來<a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Autoscaling">自動擴展</a>（auto-scaling），在滿足需求的同時又能夠省去不必要的花費</p>
+</li>
+<li><p>受益於巨大的規模經濟</p>
+<p>雲端服務公司擁有數以萬計的使用者，讓他們在購買硬體設備時，能夠以更低的價額購入，最後再以便宜的租借成本回饋給使用者。</p>
+</li>
+<li><p>增加速度以及敏捷</p>
+<p>今天我有個點子，只需要用滑鼠點擊就能夠租借到運算資源，不花時間去準備硬體設備。若這點子成功，那就太棒了；若是失敗，也可以簡單地關閉服務，而且我只需要負擔我所使用的部分。</p>
+</li>
+<li><p>將服務部署到全世界</p>
+<p>AWS 在全球都有部署機器，所以我們能夠很簡單的將應用程式部署到世界各地。</p>
+</li>
+</ul>
+<h1 id="三種使用-AWS-的方式"><a href="#三種使用-AWS-的方式" class="headerlink" title="三種使用 AWS 的方式"></a>三種使用 AWS 的方式</h1><ul>
+<li><p>AWS 管理主控台</p>
+<p>這是最簡單也是最直覺的方式。</p>
+<p><img data-src="https://d1.awsstatic.com/AWS-Management-Console/Polaris%20Console%20Home.6f773790a19ed7c9a37fcfeddb09076cc52a44e8.png" alt="AWS Management Console"></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://aws.amazon.com/cli/?nc1=h_ls">CLI</a>（Command Line Interface）</p>
+<p>若是想要在自動化之中去驗證或是存取 AWS，那就能夠使用這方法。</p>
+</li>
+<li><p>SDK（Software Development Kit）</p>
+<p>舉凡 <code>Python</code>、<code>.NET</code>、<code>JAVA</code>、<code>NodeJS</code> … 等等，都有相對應的套件能夠去使用 AWS 的資源。</p>
+</li>
+</ul>
+<h1 id="Amazon-Elastic-Compute-Cloud-Amazon-EC2"><a href="#Amazon-Elastic-Compute-Cloud-Amazon-EC2" class="headerlink" title="Amazon Elastic Compute Cloud (Amazon EC2)"></a>Amazon Elastic Compute Cloud (Amazon EC2)</h1><p>EC2 使用虛擬化技術，輕鬆地在一台實體主機上面運行多個 EC2 服務。他們可以實行不同的作業系統，例如：Windows, Linux 甚至 Mac OS。</p>
+<p>不必擔心 EC2 之間會去互相干擾影響，因為他們是使用 <a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/Hypervisor">Hypervisor</a> 技術去做管理，虛擬機始終受到保護且彼此獨立。</p>
+<blockquote>
+<p>補充：這邊的「虛擬機」是指 <a target="_blank" rel="noopener" href="https://www.vmware.com/tw.html">VMware</a> 或是 <a target="_blank" rel="noopener" href="https://www.virtualbox.org/">VirtualBox</a> 這類型的產品。而<a target="_blank" rel="noopener" href="https://www.openstack.org/">OpenStack</a> 為一種開源雲端軟體，用來管理機器上虛擬機。</p>
+</blockquote>
+<p>讓我們回想一下，若是使用自架機器的方案，當今天使用量增加，你能夠去購買更多台設備來應付突如其來的大量請求，但這不是立即的。使用 EC2 的話，只需要在網頁上點幾下，只需要幾分鐘內就能夠擴展到符合需求的硬體規格。甚至可以設定自動擴展，如此一來就不需要人工介入。</p>
+<h2 id="啟動一台-EC2"><a href="#啟動一台-EC2" class="headerlink" title="啟動一台 EC2"></a>啟動一台 EC2</h2><ul>
+<li><p>到 AWS 管理主控台搜尋 EC2</p>
+</li>
+<li><p>點選右上角「啟動實例」</p>
+</li>
+<li><p>選擇 AMI（Amazon Machine Image）</p>
+<p>AMI 可以視為 EC2 的模板，它可能是一個基本的作業系統，或是由第三方開發商提供的應用程式。</p>
+<p>可以從左邊選單，去選擇不同類型的 AMI</p>
+<ul>
+<li><p>Quick Start</p>
+<p>這裡包含了一些基本的 AMI，包含：<code>Ubuntu</code>、<code>Windows</code>、<code>REHL</code>、<code>Mac OS</code> 等。</p>
+</li>
+<li><p>AWS Marketplace</p>
+<p>這裏則是由第三方開發商提供的，內建一些他們所提供的應用程式，例如：<code>OpenVPN</code>、<code>LAMP</code> 等。</p>
+</li>
+<li><p>My AMIs</p>
+<p>你也可以自己建立屬於自己的 AMI，然後在未來重複使用，或是分享給其他人。</p>
+</li>
+</ul>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://aws.amazon.com/tw/ec2/instance-types/">選擇機器種類</a></p>
+<p>EC2 有許多不同類型可以選擇，依照不同需求來選擇不同類型的機器。</p>
+<img data-src="/2021/11/08/aws-power-hour-cloud-practitioner-intro-to-aws-cloud/instance-type.png" class="" title="Instance Type">
+
+<p>以 <code>t3.medium</code> 為例：</p>
+<ul>
+<li><code>t</code> 代表一般用途</li>
+<li><code>3</code> 代表世代，AWS 定期發佈新一代的機器，通常新的世代會擁有更好的性價比</li>
+<li><code>medium</code> 代表機器大小，擁有更多的 CPU 核心和記憶體</li>
+</ul>
+</li>
+<li><p>詳細設定</p>
+<p>這邊先介紹其中幾項設定：</p>
+<ul>
+<li><p>Number of instances</p>
+<p>你可以設定一次要啟動起個 EC2 實例。</p>
+</li>
+<li><p>Network</p>
+<p>指定 EC2 要在哪個虛擬網路下執行。</p>
+</li>
+<li><p>User data</p>
+<p>使用者可以在這邊填入腳本，當 EC2 啟動後會去執行它。</p>
+</li>
+</ul>
+</li>
+<li><p>設定容量</p>
+<p>你可以去設定 EC2 的硬碟容量</p>
+</li>
+<li><p>設定標籤</p>
+<p>新增標籤可以幫助分類管理 EC2</p>
+</li>
+<li><p>設定「安全群組」</p>
+<p>安全群組（Security Group）可以當作一種防火牆，它用來設定網路規則</p>
+</li>
+<li><p>選擇金鑰</p>
+<p><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Public-key_cryptography">金鑰</a>分別為公鑰和私鑰，來於之後要 ssh 到 EC2 時使用。</p>
+</li>
+</ul>
+<h1 id="課後問題"><a href="#課後問題" class="headerlink" title="課後問題"></a>課後問題</h1><ol>
+<li><p>Which of the following is an advantage of cloud computing? (Select Two)</p>
+<ol>
+<li>Help you more easily reach your custom around your city</li>
+<li>Eliminates having to guess your infrastructure capacity needs</li>
+<li>Ensure you meet all your security compliance requirements</li>
+<li>Increase speed to market</li>
+<li>Reduce the need for developers to write code</li>
+</ol>
+</li>
+<li><p>What are the benefits of using Amazon EC2 instances compared to physical on-premises servers? (Select Two)</p>
+<ol>
+<li>The flexibility to scale capacity on demand</li>
+<li>The short delivery time when you order an Amazon EC2 instance</li>
+<li>The ability to attach your own physical disks on Amazon EC2 instance hardware</li>
+<li>You can permanently run enough instances to handle peak workloads</li>
+<li>You only pay for the capacity the you provision</li>
+</ol>
+</li>
+</ol>
+<p>答案：</p>
+<ol>
+<li><p><code>2</code> 和 <code>4</code></p>
+</li>
+<li><p><code>1</code> 和 <code>5</code></p>
+</li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/aws/" rel="tag"><i class="fa fa-tag"></i> aws</a>
+              <a href="/tags/cloud-practitioner/" rel="tag"><i class="fa fa-tag"></i> cloud practitioner</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/11/07/docker-introduction/" rel="prev" title="Docker 簡介">
+      <i class="fa fa-chevron-left"></i> Docker 簡介
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#AWS-%E8%AD%89%E7%85%A7"><span class="nav-number">1.</span> <span class="nav-text">AWS 證照 </span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%97%9C%E6%96%BC%E8%80%83%E8%A9%A6"><span class="nav-number">2.</span> <span class="nav-text">關於考試</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%80%E9%BA%BC%E6%98%AF%E9%9B%B2%EF%BC%9F"><span class="nav-number">3.</span> <span class="nav-text">什麼是雲？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%83%A8%E7%BD%B2%E6%96%B9%E5%BC%8F"><span class="nav-number">4.</span> <span class="nav-text">部署方式</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E9%9B%B2%E7%AB%AF%E7%9A%84%E5%A5%BD%E8%99%95"><span class="nav-number">5.</span> <span class="nav-text">使用雲端的好處</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%89%E7%A8%AE%E4%BD%BF%E7%94%A8-AWS-%E7%9A%84%E6%96%B9%E5%BC%8F"><span class="nav-number">6.</span> <span class="nav-text">三種使用 AWS 的方式</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Amazon-Elastic-Compute-Cloud-Amazon-EC2"><span class="nav-number">7.</span> <span class="nav-text">Amazon Elastic Compute Cloud (Amazon EC2)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%95%9F%E5%8B%95%E4%B8%80%E5%8F%B0-EC2"><span class="nav-number">7.1.</span> <span class="nav-text">啟動一台 EC2</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%AA%B2%E5%BE%8C%E5%95%8F%E9%A1%8C"><span class="nav-number">8.</span> <span class="nav-text">課後問題</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">GoGoPenguin</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">2</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">分類</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/GoGoPenguin" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;GoGoPenguin" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:gogopenguin1995@gmail.com" title="E-Mail → mailto:gogopenguin1995@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">GoGoPenguin</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 強力驅動
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/theme-next/theme-next-pjax@0/pjax.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/lozad@1/dist/lozad.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/pangu@4/dist/browser/pangu.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+  <script>
+var pjax = new Pjax({
+  selectors: [
+    'head title',
+    '#page-configurations',
+    '.content-wrap',
+    '.post-toc-wrap',
+    '.languages',
+    '#pjax'
+  ],
+  switches: {
+    '.post-toc-wrap': Pjax.switches.innerHTML
+  },
+  analytics: false,
+  cacheBust: false,
+  scrollTo : !CONFIG.bookmark.enable
+});
+
+window.addEventListener('pjax:success', () => {
+  document.querySelectorAll('script[data-pjax], script#page-configurations, #pjax script').forEach(element => {
+    var code = element.text || element.textContent || element.innerHTML || '';
+    var parent = element.parentNode;
+    parent.removeChild(element);
+    var script = document.createElement('script');
+    if (element.id) {
+      script.id = element.id;
+    }
+    if (element.className) {
+      script.className = element.className;
+    }
+    if (element.type) {
+      script.type = element.type;
+    }
+    if (element.src) {
+      script.src = element.src;
+      // Force synchronous loading of peripheral JS.
+      script.async = false;
+    }
+    if (element.dataset.pjax !== undefined) {
+      script.dataset.pjax = '';
+    }
+    if (code !== '') {
+      script.appendChild(document.createTextNode(code));
+    }
+    parent.appendChild(script);
+  });
+  NexT.boot.refresh();
+  // Define Motion Sequence & Bootstrap Motion.
+  if (CONFIG.motion.enable) {
+    NexT.motion.integrator
+      .init()
+      .add(NexT.motion.middleWares.subMenu)
+      .add(NexT.motion.middleWares.postList)
+      .bootstrap();
+  }
+  NexT.utils.updateSidebarPosition();
+});
+</script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div id="pjax">
+  
+
+  
+
+    </div>
+</body>
+</html>
