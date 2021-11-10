@@ -204,3 +204,5 @@ EC2 使用虛擬化技術，輕鬆地在一台實體主機上面運行多個 EC2
 1. `2` 和 `4`
 
 2. `1` 和 `5`
+
+這裡還有 30 題的[線上測驗](https://amazonmr.au1.qualtrics.com/jfe/form/SV_eyBlfVF4Sloz1zL?CPEPowerHour=APR21IntroAWSCloud)
