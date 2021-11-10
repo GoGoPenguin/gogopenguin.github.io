@@ -26,6 +26,14 @@ jobs:
         if: steps.cache.outputs.cache-hit != 'true'
         run: yarn install --frozen-lockfile
 
+      - name: Inject OAuth Information
+        env:
+          OAUTH_CLIENT_ID: ${{ secrets.OAUTH_CLIENT_ID }}
+          OAUTH_CLIENT_SECRET: ${{ secrets.OAUTH_CLIENT_SECRET }}
+        run: |
+          sed -i "s/OAUTH_CLIENT_ID/$OAUTH_CLIENT_ID/g" _config.next.yml
+          sed -i "s/OAUTH_CLIENT_SECRET/$OAUTH_CLIENT_SECRET/g" _config.next.yml
+
       # Deploy hexo blog website.
       - name: Deploy
         id: deploy
