@@ -1,6 +1,107 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>AWS Power Hour: Cloud Practitioner | Global Infrastructure and Networking</title>
+    <url>/2021/11/10/aws-power-hour-cloud-practitioner-global-infrastructure-and-networking/</url>
+    <content><![CDATA[<blockquote>
+<p>Building on the previous episode, we’ll explore the global infrastructure of AWS, networking services like the Virtual Private Cloud (VPC) as well as how that infrastructure can be connected to your premises.</p>
+</blockquote>
+<span id="more"></span>
+
+<h1 id="全球基礎設施"><a href="#全球基礎設施" class="headerlink" title="全球基礎設施  "></a>全球基礎設施  <!-- markdownlint-disable MD025 --></h1><h2 id="資料中心"><a href="#資料中心" class="headerlink" title="資料中心"></a>資料中心</h2><p>AWS 的資料中心擁有許多備援機制，即使發生意外斷電了也能夠保證網路連線不會中斷。若這個資料中心發生錯誤，你可以很快的切換到下一個可用區域的資料中心</p>
+<p>查看更多關於<a href="https://aws.amazon.com/tw/compliance/data-center/controls/">資料中心</a>的資訊。</p>
+<h2 id="區域與可用區域"><a href="#區域與可用區域" class="headerlink" title="區域與可用區域"></a>區域與可用區域</h2>
+
+<p>可用區域（Ability Zone）由多個資料中心（Data Center）所組成，而可用區域也擁有備援機制。當其中一個可用區域發生錯誤，另一個可用區域會起來取代它，並接續它的工作。而多個可用區域會再組成區域（Region），每個區域之間都有 AWS 專屬的高速、低延遲的網路串連。</p>
+<p>假設今天用戶的應用程式建置在 AZ-1A 之中，當 AZ-1A 發生錯誤時，用戶能夠很輕鬆的將他的程式轉移到 AZ-1B，歸功於 AWS 的高速網路。如此一來，應用程式就能保證一定程度的可用性。</p>
+<p>AWS 在全球建置了許多區域和可用區域，在<a href="https://aws.amazon.com/about-aws/global-infrastructure/?nc1=h_ls">這裡</a>可以查看到 AWS 的全球基礎設施。</p>
+<p>而區域之間是互相隔離的，這表示 AWS 不會隨意的將用戶資料從一個區域移動到另一個區域，除非得到用戶的允許。</p>
+<h3 id="區域的選擇"><a href="#區域的選擇" class="headerlink" title="區域的選擇"></a>區域的選擇</h3><ul>
+<li><p>管理或監督的需求</p>
+<p>若是有資料安全的疑慮，不希望資料被儲存在其他地區，就可以選擇自己信任的區域。</p>
+</li>
+<li><p>鄰近客戶</p>
+<p>為了降低資料的響應時間，可以選擇鄰近客戶的區域。</p>
+</li>
+<li><p>服務的可用性</p>
+<p>隨著服務的增長，你可能會需要將服務擴展到其他區域，來服務更多的用戶。</p>
+</li>
+<li><p>成本</p>
+<p>依照不同國家或地區的成本，不同的區域會有不同的成本，因此這也會是一個選擇區域的考量點之一。</p>
+</li>
+</ul>
+<h2 id="CloudFront"><a href="#CloudFront" class="headerlink" title="CloudFront"></a>CloudFront</h2><p>Amazon <a href="https://aws.amazon.com/cloudfront">CloudFront</a> 是一項內容交付網路 (<a href="https://en.wikipedia.org/wiki/Content_delivery_network">CDN</a>) 服務，專為實現高效能、安全性和開發人員便利性而建置。</p>
+<img data-src="/2021/11/10/aws-power-hour-cloud-practitioner-global-infrastructure-and-networking/without-cdn.png" class="">
+
+<p>假設今天我們的服務架設在美國，那位在澳洲的用戶利用網路存取服務時，就得經過較長的路徑來存取的資源，例如：圖片、影片 … 等，這意味著較長的響應時間以及較差的使用者體驗。那我們該如何解決這問題？</p>
+<img data-src="/2021/11/10/aws-power-hour-cloud-practitioner-global-infrastructure-and-networking/cdn.png" class="">
+
+<p>利用 CloudFront，我們可以決定我們要快取哪些資料。快取就是將資料放在離使用者較近的地方，讓使用者能夠更快速地存取到資料。所以當澳洲的用戶要存取我們的服務時，就不用再大老遠的存取位在美國的資料，只需要存在放在澳洲內的快取即可。</p>
+<p>關於快取，有一點要注意的是存活時間（TTL, Time To Live）。設定快取的存活時間，當時效過期時，要重新從原本的資料複製一份過來，避免快取的資料過於老舊。</p>
+<p>CDN 對於需要部署在全球的服務來說非常重要，透過 CDN，我們不必在全球 25 個區域中都部署相同的基礎設施，只需要在一個區域內部署，再將資料快取在各個地方即可。</p>
+<h2 id="Outposts"><a href="#Outposts" class="headerlink" title="Outposts"></a>Outposts</h2><p>若你需要極度低的延遲，或是有管理的需求需要將資料放置在私有雲，但卻想要享有使用 AWS 服務的好處的話，那 AWS <a href="https://aws.amazon.com/outposts/">Outposts</a> 或許是一個解決方案。</p>
+<p>AWS Outposts 是一個全代管的數據中心，提供同樣的 AWS 基礎架構、AWS 服務、API 和工具。同時，你也可以使用 AWS 區域中的那些不能夠在 Outposts 上執行的服務，實現混合雲的應用。</p>
+<h1 id="網路"><a href="#網路" class="headerlink" title="網路"></a>網路</h1><img data-src="/2021/11/10/aws-power-hour-cloud-practitioner-global-infrastructure-and-networking/networking.png" class="" title="Networking">
+
+<h2 id="虛擬私有雲"><a href="#虛擬私有雲" class="headerlink" title="虛擬私有雲"></a>虛擬私有雲</h2><p>Amazon Virtual Private Cloud (<a href="https://aws.amazon.com/vpc/">VPC</a>) 是一個可以完全控制的虛擬網路環境。</p>
+<p>VPC 內可以建立子網域，分別為公有和私有子網路。公有子網域可以被直接的連線，適合放置公開的服務，例如：網頁前端、後端。而私有內無法直連，適合一些需要隱私的服務，例如：資料庫。</p>
+<p>公有子網域會透過<a href="https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Internet_Gateway.html">網際網路閘道</a>（Internet Gateway）和網際網路之間通訊。而私有子網域則是透過<a href="https://docs.aws.amazon.com/vpc/latest/userguide/vpc-nat.html">NAT 裝置</a>（NAT device）連線到網際網路。</p>
+<p><a href="https://docs.aws.amazon.com/vpc/latest/userguide/what-is-amazon-vpc.html">更多關於 VPC</a>。</p>
+<h3 id="連線方式"><a href="#連線方式" class="headerlink" title="連線方式"></a>連線方式</h3><ul>
+<li>IPsec VPN</li>
+</ul>
+<p>使用 VPN 連線至 VPC 可以確保連線是受到加密保護的。AWS 會同時建立兩條網路連線，當其中一條連線發生錯誤，使用者任可以透過另一條通道連線。</p>
+<img data-src="/2021/11/10/aws-power-hour-cloud-practitioner-global-infrastructure-and-networking/vpn.png" class="" title="VPN">
+
+<ul>
+<li>Direct Connect</li>
+</ul>
+<p>Direct Connect 可以減少連線成本、提高網路頻寬。透過 Direct Connect 可以建立 1 Gbps 或 10 Gbps<br>的網路連線。</p>
+<img data-src="/2021/11/10/aws-power-hour-cloud-practitioner-global-infrastructure-and-networking/dx.png" class="" title="Direct Connect">
+
+<p><a href="https://docs.aws.amazon.com/whitepapers/latest/aws-vpc-connectivity-options/network-to-amazon-vpc-connectivity-options.html">更多連線方式</a>。</p>
+<h2 id="平衡負載"><a href="#平衡負載" class="headerlink" title="平衡負載"></a>平衡負載</h2><p>Elastic Load Balancing (ELB) 會自動將傳入的應用程式流量分配在一個或多個可用區域 (AZ) 中的多個目標和虛擬設備上。</p>
+<p>透過平衡負載，當其中一個 AZ 發生錯誤時，可以自動將流量轉移到另外一個 AZ，以提供用戶高可用（High Available）的使用體驗。</p>
+<p><a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/userguide/what-is-load-balancing.html">更多關於 ELB</a>。</p>
+<h1 id="課後問題"><a href="#課後問題" class="headerlink" title="課後問題"></a>課後問題</h1><ol>
+<li><p>Each AWS region is composed of two or more locations that offer organizations the ability to operate production systems that are more highly available, fault tolerant, and scalable than would be possible using a single data center. What are these locations called ?</p>
+<ol>
+<li>Edge Locations</li>
+<li>AWS Local Zones</li>
+<li>Available Zones</li>
+<li>Compute centers</li>
+</ol>
+</li>
+<li><p>What is the primary benefit of an AWS Edge Location?</p>
+<ol>
+<li>Lower costs for content storage</li>
+<li>Stronger authentication controls</li>
+<li>Data sovereignty controls</li>
+<li>Lower latency delivery of content to end users</li>
+</ol>
+</li>
+<li><p>What AWS Cloud service provides a logically isolated areas within the AWS Cloud where organizations can launch AWS resources in a virtual network that the define</p>
+<ol>
+<li>Amazon Virtual Private Cloud</li>
+<li>Amazon Route 53</li>
+<li>Amazon Virtual Private Network</li>
+<li>Amazon Direct Connect</li>
+</ol>
+</li>
+</ol>
+<p>答案：</p>
+<ol>
+<li><code>3</code></li>
+<li><code>4</code></li>
+<li><code>1</code></li>
+</ol>
+]]></content>
+      <tags>
+        <tag>aws</tag>
+        <tag>cloud practitioner</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>AWS Power Hour: Cloud Practitioner | Intro to AWS Cloud</title>
     <url>/2021/11/08/aws-power-hour-cloud-practitioner-intro-to-aws-cloud/</url>
     <content><![CDATA[<blockquote>
