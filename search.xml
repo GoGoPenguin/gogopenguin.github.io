@@ -297,6 +297,45 @@
       </tags>
   </entry>
   <entry>
+    <title>Docker 基本概念</title>
+    <url>/2021/11/13/docker-basic/</url>
+    <content><![CDATA[<p>今天來聊聊 Docker 的一些基本概念以及 Docker 的架構。</p>
+<span id="more"></span>
+
+<h1 id="Docker-三元素"><a href="#Docker-三元素" class="headerlink" title="Docker 三元素 "></a>Docker 三元素 <!-- markdownlint-disable MD025 --></h1><p>在 Docker 中，有幾個基本的名詞，分別是：</p>
+<ol>
+<li>映像檔（Image）</li>
+<li>容器（Container）</li>
+<li>倉庫（Repository）</li>
+</ol>
+<p>比喻來說，映像檔就如同作業系統安裝光碟，可以重複在不同的電腦上安裝，而每一台安裝後的電腦就可以想像成是容器，最後倉庫則是從放光碟的盒子。</p>
+<h2 id="映像檔"><a href="#映像檔" class="headerlink" title="映像檔"></a>映像檔</h2><p>Docker 映像檔是一個模板，用來重複產生容器實體。</p>
+<p>例如：一個映像檔可以是一個單純的作業系統，或是包含資料庫的服務，又或者是 Python 的執行環境。</p>
+<h2 id="容器"><a href="#容器" class="headerlink" title="容器"></a>容器</h2><p>容器則是利用映像檔執行後的一個實例，一個映像檔可以同時啟動多個容器。它可以被啟動、開始、停止、刪除，且每個容器都是相互隔離的。</p>
+<p>例如：我們可以拿 <code>Ubuntu</code> 的映像檔來同時啟動多個容器來進行不同的操作，又或者拿 <code>MySQL</code> 的映像檔來啟動多個容器來建立資料庫叢集。</p>
+<h2 id="倉庫"><a href="#倉庫" class="headerlink" title="倉庫"></a>倉庫</h2><p>倉庫（Repository）是集中存放映像檔檔案的地方，而倉庫註冊伺服器（Registry）上則存放著多個倉庫，概念就如同 GitHub 與 Repository。</p>
+<p>倉庫註冊伺服器有分公有以及私有，最大的公有倉庫註冊伺服器則是 <a href="https://hub.docker.com/">Docker Hub</a>，上面存放了數量龐大的映像檔供使用者下載。</p>
+<p>使用者也可以在自己的電腦上面建立自己的倉庫註冊伺服器。</p>
+<p>而 Docker 的倉庫註冊伺服器與 <a href="http://git-scm.com/">git</a> 的操作類似，都是透過 <code>push</code>, <code>pull</code> 指令來上傳以及下載。</p>
+<h1 id="架構"><a href="#架構" class="headerlink" title="架構"></a>架構</h1><img data-src="/2021/11/13/docker-basic/client-server.png" class="" title="Architecture">
+
+<p>Docker 是 client-server 的架構，Docker client 與 Docker daemon 溝通，後者負責構建、運行和分發 Docker 容器的工作。</p>
+<blockquote>
+<p><a href="https://en.wikipedia.org/wiki/Daemon_(computing)">Daemon</a> 是一種在後台執行的電腦程式。</p>
+</blockquote>
+<p>Docker client 和 Docker daemon 可以安裝在同一台電腦中，或是 Docker client 可以連線到遠端的 Docker daemon。他們之間的溝通是使用 Restful API，透過 HTTP 網路或是 UNIX sockets。</p>
+<blockquote>
+<p><a href="https://en.wikipedia.org/wiki/Unix_domain_socket">UNIX socket</a> 用於一台主機的 process 之間溝通，不需要建立在網絡 protocol 之上，主要是基於 file system 而發展的。</p>
+</blockquote>
+<h2 id="Docker-daemon"><a href="#Docker-daemon" class="headerlink" title="Docker daemon"></a>Docker daemon</h2><p>Docker daemon（<code>dockerd</code>）用來接收 API 請求，然後管理各項 Docker 資源，例如：image, container。</p>
+<h2 id="Docker-client"><a href="#Docker-client" class="headerlink" title="Docker client"></a>Docker client</h2><p>Docker client（<code>docker</code>）是主要用來跟 Docker 溝通的方法，它會傳送指令到 <code>dockerd</code>。</p>
+<h2 id="結語"><a href="#結語" class="headerlink" title="結語"></a>結語</h2><p>像 Docker 這樣子的 client-server 還蠻常見的，通常名稱有 <code>d</code> 結尾的，常是代表 daemon 的意思。例如：<code>sshd</code>, <code>systmed</code>, <code>supervisord</code> … 等。而對應 client 就是 <code>ssh</code>、<code>systemctl</code>、<code>supervisorctl</code>，這邊的 <code>ctl</code> 則是 <code>control</code> 的意思。</p>
+]]></content>
+      <tags>
+        <tag>docker</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Docker 簡介</title>
     <url>/2021/11/07/docker-introduction/</url>
     <content><![CDATA[<p><img data-src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Docker_%28container_engine%29_logo.svg/1220px-Docker_%28container_engine%29_logo.svg.png" alt="logo"></p>
